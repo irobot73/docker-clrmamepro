@@ -1,15 +1,15 @@
-FROM jlesage/baseimage-gui:ubuntu-18.04
+FROM jlesage/baseimage-gui:ubuntu-22.04
 
 RUN set -x && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
         ca-certificates \
         curl \
-        p7zip-full \
-        p7zip-rar \
-        unzip \
+        #p7zip-full \
+        #p7zip-rar \
+        #unzip \
         wine64 \
-        zip \
+        #zip \
         && \
     # Find latest clrmamepro
     CMP_LATEST_BINARY=$( \
