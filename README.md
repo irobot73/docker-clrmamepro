@@ -1,4 +1,4 @@
-# mikenye/clrmamepro
+# irobot73/clrmamepro
 
 Docker container for Clrmamepro
 
@@ -39,7 +39,7 @@ docker run -d \
     -v /path/to/clrmamepro/scans:/opt/clrmamepro/scans \
     -v /path/to/clrmamepro/settings:/opt/clrmamepro/settings \
     -v /path/to/clrmamepro/roms:/opt/clrmamepro/roms \
-    mikenye/clrmamepro
+    irobot73/docker-clrmamepro:master
 ```
 
 Where:
@@ -111,12 +111,9 @@ Make sure to adjust according to your needs.  Note that only mandatory network
 ports are part of the example.
 
 ```yaml
-version: '2.0'
-
 services:
   clrmamepro:
-    image: mikenye/clrmamepro
-    tty: true
+    image: irobot73/docker-clrmamepro:master
     container_name: clrmamepro
     restart: always
     ports:
@@ -141,7 +138,7 @@ the Docker image, the following steps can be followed:
 
   1. Fetch the latest image:
 ```shell
-docker pull mikenye/clrmamepro
+irobot73/docker-clrmamepro:master
 ```
   2. Stop the container:
 ```shell
@@ -151,7 +148,10 @@ docker stop clrmamepro
 ```shell
 docker rm clrmamepro
 ```
-  4. Start the container using the `docker run` command.
+  4. Start the container using the `docker run` command:
+```shell
+docker run --rm --name clrmamepro -p 5800:5800 clrmamepro:latest
+```
 
 ## User/Group IDs
 
