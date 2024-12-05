@@ -1,4 +1,4 @@
-FROM jlesage/baseimage-gui:ubuntu-22.04
+FROM jlesage/baseimage-gui:ubuntu-24.04-v4.6.5
 
 RUN set -x && \
     apt-get update && \
