@@ -11,7 +11,7 @@ RUN set -x && \
         #p7zip-rar \
         #unzip \
         wine64 \
-        #zip \
+        zip \
         && \
     # Find latest clrmamepro
     CMP_LATEST_BINARY=$( \
