@@ -1,4 +1,5 @@
-FROM jlesage/baseimage-gui:ubuntu-24.04-v4.6.5
+#FROM jlesage/baseimage-gui:ubuntu-24.04-v4.6.5
+FROM jlesage/baseimage-gui:ubuntu-20.04-v4.6.6
 
 ENV APP_NAME="Clrmamepro"
 
