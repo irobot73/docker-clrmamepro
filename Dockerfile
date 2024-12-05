@@ -1,5 +1,7 @@
 FROM jlesage/baseimage-gui:ubuntu-24.04-v4.6.5
 
+ENV APP_NAME="Clrmamepro"
+
 RUN set -x && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -39,7 +41,5 @@ RUN set -x && \
     rm -rf /var/lib/apt/lists/* /tmp/*
 
 COPY startapp.sh /startapp.sh
-COPY etc/ /etc/
 COPY run_native_applications.reg /run_native_applications.reg
-
-ENV APP_NAME="Clrmamepro"
+COPY etc/ /etc/
