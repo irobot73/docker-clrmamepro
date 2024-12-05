@@ -9,9 +9,9 @@ RUN set -x && \
         curl \
         #p7zip-full \
         #p7zip-rar \
-        #unzip \
+        unzip \
         wine64 \
-        zip \
+        #zip \
         && \
     # Find latest clrmamepro
     CMP_LATEST_BINARY=$( \
