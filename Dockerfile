@@ -7,11 +7,11 @@ RUN set -x && \
     apt-get install -y --no-install-recommends \
         ca-certificates \
         curl \
-        #p7zip-full \
-        #p7zip-rar \
+        p7zip-full \
+        p7zip-rar \
         unzip \
         wine64 \
-        #zip \
+        zip \
         && \
     # Find latest clrmamepro
     CMP_LATEST_BINARY=$( \
@@ -30,7 +30,7 @@ RUN set -x && \
     curl -o /tmp/cmp.zip "https://mamedev.emulab.it/clrmamepro/$CMP_LATEST_BINARY" && \
     unzip /tmp/cmp.zip -d /opt/clrmamepro/ && \
     # Allow window decorations
-    sed -i '/<decor>no<\/decor>/d' /etc/xdg/openbox/rc.xml && \
+    #sed -i '/<decor>no<\/decor>/d' /etc/xdg/openbox/rc.xml && \
     # Clean up
     apt-get remove -y \
         ca-certificates \
