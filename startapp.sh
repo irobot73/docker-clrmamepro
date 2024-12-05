@@ -1,15 +1,23 @@
 #!/usr/bin/env sh
 #shellcheck shell=sh
+# https://www.shellcheck.net/
 
-set -xe
+# Uncomment below to show output of script
+#set -xe
+
+# https://gitlab.winehq.org/wine/wine/-/wikis/Debug-Channels
+#WINEDEBUG=fixme-all,+module
 
 HOME=/config
 export HOME
 
-cd /opt/clrmamepro
+mkdir -p $HOME/.wine
 
-# Allow running of native linux binaries
-/usr/bin/wine64-stable regedit /C /run_native_applications.reg
+# If .INI doesn't exist, create one so the window doesn't minimize
+# https://mamedev.emulab.it/clrmamepro/#docs
+if [ ! -e /opt/clrmamepro/cmpro.ini ]; then
+    printf "[CMPRO SETTINGS]\nAdv_HideWindow = off" >> /opt/clrmamepro/cmpro.ini
+fi
 
 # Launch clrmamepro
-/usr/bin/wine64-stable /opt/clrmamepro/cmpro64.exe 2>&1 | awk -W Interactive '{print "[clrmamepro] " $0}'
+wine /opt/clrmamepro/cmpro64.exe 2>&1 | awk -W Interactive '{print "[clrmamepro] " $0}'
