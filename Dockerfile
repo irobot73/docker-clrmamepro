@@ -1,8 +1,14 @@
+# Build upon via https://github.com/mikenye/docker-clrmamepro
+
 FROM jlesage/baseimage-gui:ubuntu-24.04-v4.6.5
 
-ENV APP_NAME="Clrmamepro"
+# https://en.wikipedia.org/wiki/Chmod
+ARG MODE=755
 
 RUN set -x && \
+    set-cont-env APP_NAME "clrmamepro" && \
+    # Update image and pull dependencies
+    dpkg --add-architecture i386 && \ 
     apt-get update && \
     apt-get install -y --no-install-recommends \
         ca-certificates \
@@ -10,9 +16,15 @@ RUN set -x && \
         p7zip-full \
         p7zip-rar \
         unzip \
-        wine64 \
+        wget \
         zip \
         && \
+    # Wine install - https://gitlab.winehq.org/wine/wine/-/wikis/Debian-Ubuntu
+    mkdir -pm755 /etc/apt/keyrings && \
+    wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key && \
+    wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/noble/winehq-noble.sources && \
+    apt-get update && \
+    apt-get install -y --install-recommends winehq-devel && \
     # Find latest clrmamepro
     CMP_LATEST_BINARY=$( \
         curl https://mamedev.emulab.it/clrmamepro/ | \
@@ -23,14 +35,11 @@ RUN set -x && \
         sort -r | \
         head -1 \
         ) && \
-    # Document version
-    echo $(basename --suffix=.zip $CMP_LATEST_BINARY | cut -d "_" -f 1) >> /VERSIONS && \
     # Install clrmamepro
     mkdir -p /opt/clrmamepro && \
     curl -o /tmp/cmp.zip "https://mamedev.emulab.it/clrmamepro/$CMP_LATEST_BINARY" && \
     unzip /tmp/cmp.zip -d /opt/clrmamepro/ && \
-    # Allow window decorations
-    #sed -i '/<decor>no<\/decor>/d' /etc/xdg/openbox/rc.xml && \
+    take-ownership /opt/clrmamepro && \
     # Clean up
     apt-get remove -y \
         ca-certificates \
@@ -40,6 +49,5 @@ RUN set -x && \
     apt-get clean -y && \
     rm -rf /var/lib/apt/lists/* /tmp/*
 
-COPY startapp.sh /startapp.sh
-COPY run_native_applications.reg /run_native_applications.reg
-COPY etc/ /etc/
+# https://docs.docker.com/reference/dockerfile/#copy
+COPY --chmod=$MODE startapp.sh /startapp.sh
