@@ -46,10 +46,12 @@ RUN set -x && \
     # Install clrmamepro
     curl -o /tmp/cmp.zip "https://mamedev.emulab.it/clrmamepro/$CMP_LATEST_BINARY" && \
     unzip /tmp/cmp.zip -d /opt/clrmamepro/ && \
+    # Create basic .INI - should be using a VOLUME/BIND to persist
     touch /opt/clrmamepro/cmpro.ini && \
     printf "[CMPRO SETTINGS]\nAdv_HideWindow = off" > /opt/clrmamepro/cmpro.ini && \
+    # Set perms
     take-ownership /opt/clrmamepro && \
-    chmod +x /opt/clrmamepro/*.exe
+    chmod +x /opt/clrmamepro/*.exe && \
     # Clean up
     apt-get remove -y \
         ca-certificates \
