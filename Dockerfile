@@ -5,6 +5,14 @@ FROM jlesage/baseimage-gui:ubuntu-24.04-v4.6.5
 # https://en.wikipedia.org/wiki/Chmod
 ARG MODE=755
 
+# https://docs.docker.com/reference/dockerfile/#copy
+COPY --chmod=$MODE startapp.sh /startapp.sh
+
+# https://docs.docker.com/reference/dockerfile/#workdir
+WORKDIR /opt/clrmamepro
+
+COPY /apps/* /opt/clrmamepro/
+
 RUN set -x && \
     set-cont-env APP_NAME "clrmamepro" && \
     # Update image and pull dependencies
@@ -36,10 +44,12 @@ RUN set -x && \
         head -1 \
         ) && \
     # Install clrmamepro
-    mkdir -p /opt/clrmamepro && \
     curl -o /tmp/cmp.zip "https://mamedev.emulab.it/clrmamepro/$CMP_LATEST_BINARY" && \
     unzip /tmp/cmp.zip -d /opt/clrmamepro/ && \
+    touch /opt/clrmamepro/cmpro.ini && \
+    printf "[CMPRO SETTINGS]\nAdv_HideWindow = off" > /opt/clrmamepro/cmpro.ini && \
     take-ownership /opt/clrmamepro && \
+    chmod +x /opt/clrmamepro/*.exe
     # Clean up
     apt-get remove -y \
         ca-certificates \
@@ -48,6 +58,3 @@ RUN set -x && \
     apt-get autoremove -y && \
     apt-get clean -y && \
     rm -rf /var/lib/apt/lists/* /tmp/*
-
-# https://docs.docker.com/reference/dockerfile/#copy
-COPY --chmod=$MODE startapp.sh /startapp.sh
