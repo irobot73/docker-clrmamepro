@@ -28,15 +28,16 @@ if [ -e "$INIFILE" ] && [ ! -s "$INIFILE" ]; then # Fil exists and is empty
     echo 'Initializing .INI file.'
     printf "[CMPRO SETTINGS]\nAdv_HideWindow = off" > $INIFILE
     chown -R $USER_ID:$GROUP_ID $INIFILE
+    chmod 666 $INIFILE
 elif [ ! -e "$FILE" ]; then # File does NOT exist (should NEVER happen)
     echo 'Creating and initializing .INI file.'
     touch $INIFILE
     printf "[CMPRO SETTINGS]\nAdv_HideWindow = off" > $INIFILE
     chown -R $USER_ID:$GROUP_ID $INIFILE
+    chmod 666 $INIFILE
 else
     echo 'Utilizing existing .INI file.'
 fi
-
 
 # Launch clrmamepro
 wine /opt/clrmamepro/cmpro64.exe 2>&1 | awk -W Interactive '{print "[clrmamepro] " $0}'
