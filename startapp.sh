@@ -3,7 +3,7 @@
 # https://www.shellcheck.net/
 
 # Uncomment below to show output of script
-set -xe
+#set -xe
 
 # https://gitlab.winehq.org/wine/wine/-/wikis/Debug-Channels
 #WINEDEBUG=fixme-all,+module
@@ -22,17 +22,17 @@ echo "$pathext_orig" | grep -qE '(^|;)\.(;|$)' || wine reg add "$regKey" /v PATH
 
 INIFILE=/opt/clrmamepro/cmpro.ini
 
-# File doesn't exist (should never happen)
-if [[ ! -e $INIFILE ]]; then
-    # If .INI doesn't exist, create one so the window doesn't minimize
+# If .INI doesn't exist, create one so the window doesn't minimize
     #   https://mamedev.emulab.it/clrmamepro/#docs
-    echo 'Creating .INI file.'
-    printf "[CMPRO SETTINGS]\nAdv_HideWindow = off" > $INIFILE
-fi
-# .INI exists but empty (0-bytes) or just white-spaces
-if [[ -z $(grep '[^[:space:]]' $INIFILE) ]]; then
+if [ -e "$INIFILE" ] && [ ! -s "$INIFILE" ]; then # Fil exists and is empty
     echo 'Initializing .INI file.'
     printf "[CMPRO SETTINGS]\nAdv_HideWindow = off" > $INIFILE
+elif [ ! -e "$FILE" ]; then # File does NOT exist (should NEVER happen)
+    echo 'Creating and initializing .INI file.'
+    touch $INIFILE
+    printf "[CMPRO SETTINGS]\nAdv_HideWindow = off" > $INIFILE
+else
+    echo 'Utilizing existing .INI file.'
 fi
 chown -R $USER_ID:$GROUP_ID $INIFILE
 
