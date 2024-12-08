@@ -1,9 +1,14 @@
-# Build upon via https://github.com/mikenye/docker-clrmamepro
+# 1) Pull code from Github
+# 2) Tweak/update
+# 3) Build locally:  docker build --no-cache -t clrmamepro:latest .
+# 4) Run locally:    docker run --rm --name clrmamepro -p 5800:5800 clrmamepro:latest
 
+# Built upon via https://github.com/mikenye/docker-clrmamepro
 FROM jlesage/baseimage-gui:ubuntu-24.04-v4.6.5
 
 # https://en.wikipedia.org/wiki/Chmod
-ARG MODE=755
+ARG MODE=555
+ARG INIFILE=/opt/clrmamepro/cmpro.ini
 
 # https://docs.docker.com/reference/dockerfile/#copy
 COPY --chmod=$MODE startapp.sh /startapp.sh
@@ -21,6 +26,7 @@ RUN set -x && \
     apt-get install -y --no-install-recommends \
         ca-certificates \
         curl \
+        nano \
         p7zip-full \
         p7zip-rar \
         unzip \
@@ -46,13 +52,16 @@ RUN set -x && \
     # Install clrmamepro
     curl -o /tmp/cmp.zip "https://mamedev.emulab.it/clrmamepro/$CMP_LATEST_BINARY" && \
     unzip /tmp/cmp.zip -d /opt/clrmamepro/ && \
+    # Create .INI, in case not utilized during RUN
+    touch $INIFILE && \
+    printf "[CMPRO SETTINGS]\nAdv_HideWindow = off" > $INIFILE && \
     # Set perms
-    #take-ownership /opt/clrmamepro && \
+    chmod 666 $INIFILE && \
+    take-ownership /opt/clrmamepro && \
     chmod +x /opt/clrmamepro/*.exe && \
     # Clean up
     apt-get remove -y \
         ca-certificates \
-        curl \
         && \
     apt-get autoremove -y && \
     apt-get clean -y && \
