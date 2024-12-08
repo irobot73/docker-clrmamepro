@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
-#shellcheck shell=sh
 # https://www.shellcheck.net/
+#shellcheck shell=sh
 
 # Uncomment below to show output of script
 #set -xe
@@ -20,24 +20,9 @@ regKey='HKLM\System\CurrentControlSet\Control\Session Manager\Environment'
 pathext_orig=$( wine reg query "$regKey" /v PATHEXT | tr -d '\r' | awk '/^  /{ print $3 }' )
 echo "$pathext_orig" | grep -qE '(^|;)\.(;|$)' || wine reg add "$regKey" /v PATHEXT /f /d "${pathext_orig};."
 
-INIFILE=/opt/clrmamepro/cmpro.ini
-
-# If .INI doesn't exist, create one so the window doesn't minimize
-    #   https://mamedev.emulab.it/clrmamepro/#docs
-if [ -e "$INIFILE" ] && [ ! -s "$INIFILE" ]; then # Fil exists and is empty
-    echo 'Initializing .INI file.'
-    printf "[CMPRO SETTINGS]\nAdv_HideWindow = off" > $INIFILE
-    chown -R $USER_ID:$GROUP_ID $INIFILE
-    chmod 666 $INIFILE
-elif [ ! -e "$FILE" ]; then # File does NOT exist (should NEVER happen)
-    echo 'Creating and initializing .INI file.'
-    touch $INIFILE
-    printf "[CMPRO SETTINGS]\nAdv_HideWindow = off" > $INIFILE
-    chown -R $USER_ID:$GROUP_ID $INIFILE
-    chmod 666 $INIFILE
-else
-    echo 'Utilizing existing .INI file.'
-fi
+# Uncomment one of the following to pause the APP if you wish to console in & check/test your DOCKERFILE
+#sleep infinity
+#while :; do sleep 2073600; done # /bin/sleep is capped at 24hrs
 
 # Launch clrmamepro
 wine /opt/clrmamepro/cmpro64.exe 2>&1 | awk -W Interactive '{print "[clrmamepro] " $0}'
