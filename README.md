@@ -113,22 +113,43 @@ ports are part of the example.
 ```yaml
 services:
   clrmamepro:
-    image: irobot73/docker-clrmamepro:master
+    image: ghcr.io/irobot73/docker-clrmamepro:master
     container_name: clrmamepro
-    restart: always
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+# Container configuration(s)
+      - ./config:/config
+# Local substitutions
+      - ./data/buttons:/opt/clrmamepro/buttons
+      - ./data/dir2dat:/opt/clrmamepro/dir2dat
+      - ./data/downloads:/opt/clrmamepro/downloads
+      - ./data/fastscans:/opt/clrmamepro/fastscans
+      - ./data/fixdats:/opt/clrmamepro/fixdats
+      - ./data/hashes:/opt/clrmamepro/hashes
+      - ./data/headers:/opt/clrmamepro/headers
+      - ./data/lists:/opt/clrmamepro/lists
+      - ./data/logs:/opt/clrmamepro/logs
+      - ./data/scans:/opt/clrmamepro/scans
+      - ./data/settings:/opt/clrmamepro/settings
+      - ./data/temp:/opt/clrmamepro/temp
+# Remote substitutions
+      - /nas/Emu/backup:/opt/clrmamepro/backup
+      - /nas/Emu/DATs:/opt/clrmamepro/datfiles
+      - /nas/Emu/ROMs:/opt/clrmamepro/roms
+      - /nas/Emu/2-Sort:/opt/clrmamepro/source
+# Config file
+      - ./data/cmpro.ini:/opt/clrmamepro/cmpro.ini
+    environment:
+      #- DARK_MODE=1
+      - DISPLAY_WIDTH=1920
+      - DISPLAY_HEIGHT=1080
+      - GROUP_ID=1000
+      - KEEP_APP_RUNNING=1
+      - USER_ID=1000
     ports:
       - 5800:5800
-    volumes:
-      - /path/to/clrmamepro/backup:/opt/clrmamepro/backup
-      - /path/to/clrmamepro/datfiles:/opt/clrmamepro/datfiles
-      - /path/to/clrmamepro/dir2dat:/opt/clrmamepro/dir2dat
-      - /path/to/clrmamepro/downloads:/opt/clrmamepro/downloads
-      - /path/to/clrmamepro/fastscans:/opt/clrmamepro/fastscans
-      - /path/to/clrmamepro/headers:/opt/clrmamepro/headers
-      - /path/to/clrmamepro/logs:/opt/clrmamepro/logs
-      - /path/to/clrmamepro/scans:/opt/clrmamepro/scans
-      - /path/to/clrmamepro/settings:/opt/clrmamepro/settings
-      - /path/to/clrmamepro/roms:/opt/clrmamepro/roms
 ```
 
 ## Docker Image Update
