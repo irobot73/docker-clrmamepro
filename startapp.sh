@@ -7,6 +7,7 @@
 
 # https://gitlab.winehq.org/wine/wine/-/wikis/Debug-Channels
 #WINEDEBUG=fixme-all,+module
+WINEDEBUG=-all
 
 HOME=/config
 export HOME
