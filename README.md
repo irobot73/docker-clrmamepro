@@ -80,15 +80,19 @@ format: `<HOST_DIR>:<CONTAINER_DIR>[:PERMISSIONS]`.
 | Container path  | Permissions | Description |
 |-----------------|-------------|-------------|
 | `/opt/clrmamepro/backup`    | rw | CMPro places rom-backups here. |
+| `/opt/clrmamepro/buttons    | rw | alternate CMPro buttons. |
+| `/opt/clrmamepro/cache      | rw | CMPro cache. |
 | `/opt/clrmamepro/datfiles`  | rw | You should place your datfiles in this folder. |
 | `/opt/clrmamepro/dir2dat`   | rw | You should place your dir2dat saved settings in this folder. |
 | `/opt/clrmamepro/downloads` | rw | CMPro places downloads here. |
 | `/opt/clrmamepro/fastscans` | rw | You should place your fastscans in this folder. |
+| `/opt/clrmamepro/fixdats`   | rw | Post-scanning DATs of needed ROMs. |
+| `/opt/clrmamepro/hashes`    | rw | ?? |
 | `/opt/clrmamepro/headers`   | rw | XML header files go in this folder. |
+| `/opt/clrmamepro/lists`     | rw | Have/Miss files go in this folder. |
 | `/opt/clrmamepro/logs`      | rw | You should place your logfiles in this folder. |
 | `/opt/clrmamepro/scans`     | rw | CMPro places ScanResults here. |
 | `/opt/clrmamepro/settings`  | rw | CMPro places SettingsFiles here. |
-| `/opt/clrmamepro/roms`      | rw | Legally obtained ROMs go here. |
 
 ### Ports
 
@@ -122,25 +126,12 @@ services:
 # Container configuration(s)
       - ./config:/config
 # Local substitutions
-      - ./data/buttons:/opt/clrmamepro/buttons
-      - ./data/dir2dat:/opt/clrmamepro/dir2dat
-      - ./data/downloads:/opt/clrmamepro/downloads
-      - ./data/fastscans:/opt/clrmamepro/fastscans
-      - ./data/fixdats:/opt/clrmamepro/fixdats
-      - ./data/hashes:/opt/clrmamepro/hashes
-      - ./data/headers:/opt/clrmamepro/headers
-      - ./data/lists:/opt/clrmamepro/lists
-      - ./data/logs:/opt/clrmamepro/logs
-      - ./data/scans:/opt/clrmamepro/scans
-      - ./data/settings:/opt/clrmamepro/settings
-      - ./data/temp:/opt/clrmamepro/temp
+      - ./data:/opt/clrmamepro
 # Remote substitutions
       - /nas/Emu/backup:/opt/clrmamepro/backup
       - /nas/Emu/DATs:/opt/clrmamepro/datfiles
-      - /nas/Emu/ROMs:/opt/clrmamepro/roms
+      - /nas/Emu/ROMs:/roms
       - /nas/Emu/2-Sort:/opt/clrmamepro/source
-# Config file
-      - ./data/cmpro.ini:/opt/clrmamepro/cmpro.ini
     environment:
       #- DARK_MODE=1
       - DISPLAY_WIDTH=1920

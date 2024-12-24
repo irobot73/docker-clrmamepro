@@ -1,0 +1,45 @@
+# Use this COMPOSE.YML file to build locally
+#   clear && docker-compose build --no-cache && docker-compose up --force-recreate && docker-compose down
+
+services:
+  clrmamepro_test:
+    # To build from local Dockerfile
+    #build: 
+    #  context: .
+    #  dockerfile: Dockerfile
+    # To build from remote repository
+    image: ghcr.io/irobot73/docker-clrmamepro:master
+    container_name: clrmamepro_test
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+
+      - ./config:/config
+
+      - ./data:/opt/clrmamepro
+
+      - /nas/Emu/backup:/opt/clrmamepro/backup
+      - /nas/Emu/DATs:/opt/clrmamepro/datfiles
+
+      - /nas/Emu/ROMs:/roms
+      - /nas/Emu/2-Sort:/sources
+    environment:
+      - DARK_MODE=1
+      - DISPLAY_WIDTH=1920
+      - DISPLAY_HEIGHT=1080
+      - GROUP_ID=1000
+      - KEEP_APP_RUNNING=1
+      - USER_ID=1000
+    ports:
+      - 5800:5800
+      #- 5900:5900
+    deploy:
+      # https://docs.docker.com/compose/compose-file/compose-file-v3/#restart_policy
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+    #labels:
+      #- "com.centurylinklabs.watchtower.enable=true"
+      #- "diun.enable=true"

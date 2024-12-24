@@ -1,0 +1,2 @@
+chdman.exe
+mame.exe
