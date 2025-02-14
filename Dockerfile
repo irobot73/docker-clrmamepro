@@ -54,8 +54,6 @@ RUN set -x && \
     $SCRIPT_DIR/clrmamepro.sh unzip_clrmamepro $SOURCE_DIR/cmpro.zip $CMPRO_DIR && \
 # Create .INI, in case not utilized during RUN
     $SCRIPT_DIR/clrmamepro.sh setup_ini_file /opt/clrmamepro/cmpro.ini && \
-# Allow window decorations
-    sed -i '/<decor>no<\/decor>/d' /run/openbox/rc.xml && \
 # Set final perms
     take-ownership $CMPRO_DIR && \
     chmod +x $CMPRO_DIR/*.exe && \
