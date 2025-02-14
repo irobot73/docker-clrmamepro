@@ -30,6 +30,9 @@ export HOME
 
 mkdir -p $HOME/.wine
 
+# Allow window decorations
+sed -i '/<decor>no<\/decor>/d' /run/openbox/rc.xml && \
+
 # Uncomment one of the following to pause the APP if you wish to console in & check/test your DOCKERFILE
 #sleep infinity
 #while :; do sleep 2073600; done # /bin/sleep is capped at 24hrs
